@@ -1,5 +1,6 @@
 ﻿.env
 .env.*
+js/firebase-config.js
 .env.local
 *.pem
 credentials.json

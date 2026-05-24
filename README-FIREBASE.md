@@ -39,9 +39,9 @@ npx -y firebase-tools@latest use --add YOUR_PROJECT_ID
 
 ### 4. Register a web app
 
-Console → Project settings → Your apps → **Web** → copy config into `js/firebase-config.js` (see `js/firebase-config.example.js`).
+Console → Project settings → Your apps → **Web** → use the config values locally or in Vercel env vars (see below).
 
-Web API keys are public by design; security comes from **Firestore/Storage rules** and **Auth**.
+`js/firebase-config.js` is **gitignored** and never committed. The repo only ships `js/firebase-config.example.js` with placeholders.
 
 ### 5. Create admin user
 
@@ -71,15 +71,60 @@ set GOOGLE_APPLICATION_CREDENTIALS=path\to\serviceAccount.json
 npm run seed
 ```
 
+## Local development
+
+1. Copy the example config (once per machine):
+
+   ```bash
+   cp js/firebase-config.example.js js/firebase-config.js
+   ```
+
+2. Edit `js/firebase-config.js` with your Firebase web app values from the Console.
+3. Serve the site from the project root (any static server). `js/firebase-config.js` stays on disk only and is listed in `.gitignore`.
+
 ## Vercel production
 
-1. Add the same values from `js/firebase-config.js` to the Vercel project (optional if you commit config with real keys).
-2. Ensure `js/firebase-config.js` is deployed (not only `.example`).
-3. In Firebase Console → Authentication → **Authorized domains**, add:
-   - `kancyculture.vercel.app`
-   - `localhost` (for local testing)
+The deploy runs `npm run build`, which runs `scripts/generate-firebase-config.js` and writes `js/firebase-config.js` from environment variables.
 
-No server-side env vars are required for this static site unless you add a build step to inject config.
+### Required Vercel environment variables
+
+Set these in **Vercel → Project → Settings → Environment Variables** (Production, Preview, and Development as needed):
+
+| Variable | Example / notes |
+|----------|-----------------|
+| `FIREBASE_API_KEY` | Web API key from Firebase Console |
+| `FIREBASE_AUTH_DOMAIN` | `kansy-couture.firebaseapp.com` |
+| `FIREBASE_PROJECT_ID` | `kansy-couture` |
+| `FIREBASE_STORAGE_BUCKET` | `kansy-couture.firebasestorage.app` |
+| `FIREBASE_MESSAGING_SENDER_ID` | Numeric sender ID |
+| `FIREBASE_APP_ID` | `1:…:web:…` |
+
+`vercel.json` sets `"buildCommand": "npm run build"` so each deployment regenerates the config file.
+
+In Firebase Console → Authentication → **Authorized domains**, add:
+
+- `kancyculture.vercel.app`
+- `localhost` (for local testing)
+
+## Security: exposed API key & rotation
+
+GitHub secret scanning flagged a Google API key that was committed in `js/firebase-config.js` (commit `de7dabe5`). **Removing the file from the latest commit does not remove it from git history.** You should still:
+
+1. **Rotate or restrict the key** in [Google Cloud Console](https://console.cloud.google.com/apis/credentials) (APIs & Services → Credentials), or regenerate from Firebase Console → Project settings → Your apps.
+2. **Application restrictions** → HTTP referrers, for example:
+   - `https://kancyculture.vercel.app/*`
+   - `http://localhost/*`
+   - `http://127.0.0.1/*`
+3. **API restrictions** → allow only Firebase-related APIs (Identity Toolkit, Firestore, Storage, etc.).
+4. Keep **Firestore** and **Storage** rules strict (see below); client keys alone must not grant admin access.
+
+### Optional: purge key from git history
+
+To remove the key from all commits (heavy, rewrites history):
+
+- Use [git-filter-repo](https://github.com/newren/git-filter-repo) or [BFG Repo-Cleaner](https://rtyley.github.io/bfg-repo-cleaner/), then force-push and coordinate with anyone who cloned the repo.
+
+Even after a history rewrite, **rotate the key** if it was ever public.
 
 ## Collections schema
 
@@ -151,7 +196,10 @@ Review `firestore.rules` and `storage.rules` before production traffic.
 |------|---------|
 | `firebase.json`, `.firebaserc` | CLI project config |
 | `firestore.rules`, `storage.rules` | Security |
-| `js/firebase-config.js` | Web app config |
+| `js/firebase-config.example.js` | Committed template (placeholders) |
+| `js/firebase-config.js` | Local or build-generated config (**gitignored**) |
+| `scripts/generate-firebase-config.js` | Vercel build: writes config from env vars |
+| `vercel.json` | Build command for static deploy |
 | `js/firebase-app.js` | SDK init |
 | `js/catalog.js` | Public Firestore loading |
 | `js/admin-auth.js`, `js/admin-dashboard.js` | Admin auth + CRUD |
@@ -165,5 +213,5 @@ Review `firestore.rules` and `storage.rules` before production traffic.
 |-------|-----|
 | Permission denied on save | Deploy rules; confirm signed-in user is admin |
 | Empty gallery | Run **Import site defaults** or check `active` flags |
-| Firebase not configured banner | Fill in `js/firebase-config.js` |
+| Firebase not configured banner | Copy example → `js/firebase-config.js` locally; on Vercel, set env vars and redeploy |
 | Index errors | Deploy indexes: `firebase deploy --only firestore:indexes` |

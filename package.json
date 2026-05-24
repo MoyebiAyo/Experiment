@@ -3,6 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "build": "node scripts/generate-firebase-config.js",
     "seed": "node scripts/seed-firestore.mjs"
   },
   "devDependencies": {
