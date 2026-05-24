@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kansy Couture admin dashboard — manage collections and appointments.">
+  <title>Admin Dashboard — Kansy Couture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="admin">
+  <header class="main-header">
+    <div class="main-header__inner">
+      <a href="index.html" class="logo"><span class="logo__title">Kansy Couture</span><span class="logo__tagline">Admin Portal</span></a>
+      <a href="index.html" class="btn btn--secondary btn--small">Exit Admin</a>
+    </div>
+  </header>
+
+  <main class="admin-layout">
+    <aside class="admin-sidebar">
+      <p class="admin-sidebar__title">Dashboard</p>
+      <nav class="admin-nav" aria-label="Admin sections">
+        <a href="#overview" class="active" data-panel="overview">Overview</a>
+        <a href="#appointments" data-panel="appointments">Appointments</a>
+        <a href="#collections" data-panel="collections">Collections</a>
+      </nav>
+    </aside>
+
+    <div class="admin-content">
+      <section class="admin-panel active" id="panel-overview" data-panel="overview">
+        <h2>Overview</h2>
+        <div class="admin-stats">
+          <div class="admin-stat"><p class="admin-stat__value" id="stat-appointments">0</p><p class="admin-stat__label">Pending Appointments</p></div>
+          <div class="admin-stat"><p class="admin-stat__value">6</p><p class="admin-stat__label">Active Collections</p></div>
+          <div class="admin-stat"><p class="admin-stat__value" id="stat-clients">0</p><p class="admin-stat__label">Registered Clients</p></div>
+          <div class="admin-stat"><p class="admin-stat__value">4.9</p><p class="admin-stat__label">Client Rating</p></div>
+        </div>
+        <p style="font-size:14px;color:var(--color-muted);">Manage appointments and collections from the sidebar. Changes sync locally for this demo portal.</p>
+      </section>
+
+      <section class="admin-panel" id="panel-appointments" data-panel="appointments">
+        <h2>Manage Appointments</h2>
+        <table class="admin-table" aria-label="Appointments">
+          <thead>
+            <tr><th>Client</th><th>Type</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="admin-appointments-body">
+            <tr><td colspan="6" style="text-align:center;color:var(--color-muted);">No appointments yet</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="admin-panel" id="panel-collections" data-panel="collections">
+        <h2>Manage Collections</h2>
+        <table class="admin-table" aria-label="Collections">
+          <thead>
+            <tr><th>Outfit</th><th>Category</th><th>Starting Price</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="admin-collections-body">
+            <tr data-id="1"><td>Silk Evening Gown</td><td>Dresses</td><td>$890</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle" aria-label="Toggle status">Toggle</button></td></tr>
+            <tr data-id="2"><td>Structured Couture Blazer</td><td>Outerwear</td><td>$650</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
+            <tr data-id="3"><td>Handcrafted Ankle Boots</td><td>Footwear</td><td>$420</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
+            <tr data-id="4"><td>Gold Statement Earrings</td><td>Accessories</td><td>$185</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
+            <tr data-id="5"><td>Linen Couture Skirt</td><td>Dresses</td><td>$320</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
+            <tr data-id="6"><td>Structured Designer Handbag</td><td>Accessories</td><td>$540</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
+          </tbody>
+        </table>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

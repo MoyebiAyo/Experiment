@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Login to your Kansy Couture client portal.">
+  <title>Login — Kansy Couture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="login">
+  <header class="main-header">
+    <div class="main-header__inner">
+      <a href="index.html" class="logo"><span class="logo__title">Kansy Couture</span><span class="logo__tagline">Bespoke Fashion Design</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero" style="padding:48px 0;">
+      <div class="container">
+        <h1 class="page-hero__title">Client Login</h1>
+        <p class="page-hero__subtitle">Access your appointments, messages, and saved collections</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <form class="form-panel" id="login-form" novalidate>
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" name="email" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" name="password" required autocomplete="current-password" minlength="6">
+        </div>
+        <button type="submit" class="btn btn--primary" style="width:100%;">Sign In</button>
+        <p class="form-message" id="login-message" role="status" aria-live="polite"></p>
+        <p class="form-footer">New client? <a href="register.html">Create an account</a></p>
+        <p class="form-footer" style="margin-top:12px;"><a href="admin.html">Admin access</a></p>
+      </form>
+    </section>
+  </main>
+
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

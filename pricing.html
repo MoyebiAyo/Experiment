@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kansy Couture pricing packages and payment information.">
+  <title>Pricing — Kansy Couture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="pricing">
+  <header class="main-header">
+    <div class="main-header__inner">
+      <a href="index.html" class="logo"><span class="logo__title">Kansy Couture</span><span class="logo__tagline">Bespoke Fashion Design</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
+      <nav class="main-nav" id="main-nav">
+        <ul class="main-nav__list">
+          <li><a href="index.html" class="main-nav__link">Home</a></li>
+          <li><a href="collections.html" class="main-nav__link">Collections</a></li>
+          <li><a href="appointment.html" class="main-nav__link">Book Appointment</a></li>
+          <li><a href="chat.html" class="main-nav__link">Chat Designer</a></li>
+          <li><a href="pricing.html" class="main-nav__link active">Pricing</a></li>
+          <li><a href="login.html" class="main-nav__link" id="nav-auth-link">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title">Pricing &amp; Payment</h1>
+        <p class="page-hero__subtitle">Transparent packages for consultations, bespoke design, and alterations</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="pricing-grid">
+          <article class="pricing-card">
+            <h3 class="pricing-card__name">Consultation</h3>
+            <p class="pricing-card__price">$0</p>
+            <p class="pricing-card__period">First visit · 30 minutes</p>
+            <ul class="pricing-card__features">
+              <li>Style assessment</li>
+              <li>Collection walkthrough</li>
+              <li>Starting price quotes</li>
+              <li>No obligation</li>
+            </ul>
+            <a href="appointment.html" class="btn btn--secondary" style="width:100%;">Book Free Consult</a>
+          </article>
+          <article class="pricing-card pricing-card--featured">
+            <span class="pricing-card__badge">Most Popular</span>
+            <h3 class="pricing-card__name">Bespoke Design</h3>
+            <p class="pricing-card__price">From $650</p>
+            <p class="pricing-card__period">Per garment · custom fit</p>
+            <ul class="pricing-card__features">
+              <li>1-on-1 designer sessions</li>
+              <li>Fabric selection included</li>
+              <li>2 fitting appointments</li>
+              <li>50% deposit to begin</li>
+              <li>Balance due at pickup</li>
+            </ul>
+            <a href="appointment.html" class="btn btn--gold" style="width:100%;">Start Your Design</a>
+          </article>
+          <article class="pricing-card">
+            <h3 class="pricing-card__name">Alterations</h3>
+            <p class="pricing-card__price">From $85</p>
+            <p class="pricing-card__period">Per item · 5–7 day turnaround</p>
+            <ul class="pricing-card__features">
+              <li>Hemming &amp; tailoring</li>
+              <li>Size adjustments</li>
+              <li>Rush service available</li>
+              <li>Quote at fitting</li>
+            </ul>
+            <a href="chat.html" class="btn btn--secondary" style="width:100%;">Ask Designer</a>
+          </article>
+        </div>
+
+        <div class="payment-info">
+          <h3>Payment Information</h3>
+          <p>We accept major credit cards, debit cards, and bank transfers. A 50% deposit is required to commence bespoke orders; the remaining balance is due upon final fitting approval.</p>
+          <ul>
+            <li>Consultations for new clients are complimentary</li>
+            <li>Payment plans available for orders over $2,000</li>
+            <li>Online payment integration coming soon — appointments can be confirmed in-studio</li>
+            <li>Cancellations within 48 hours may incur a $50 rescheduling fee</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container footer__bottom-inner" style="padding:24px 0;"><p>&copy; 2026 Kansy Couture</p></div></footer>
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

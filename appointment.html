@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Book a fitting or consultation at Kansy Couture.">
+  <title>Book Appointment — Kansy Couture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="appointment">
+  <div class="utility-bar"><p class="utility-bar__message">Appointments confirmed within 24 hours by our designer</p></div>
+  <header class="main-header">
+    <div class="main-header__inner">
+      <a href="index.html" class="logo"><span class="logo__title">Kansy Couture</span><span class="logo__tagline">Bespoke Fashion Design</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
+      <nav class="main-nav" id="main-nav">
+        <ul class="main-nav__list">
+          <li><a href="index.html" class="main-nav__link">Home</a></li>
+          <li><a href="collections.html" class="main-nav__link">Collections</a></li>
+          <li><a href="appointment.html" class="main-nav__link active">Book Appointment</a></li>
+          <li><a href="chat.html" class="main-nav__link">Chat Designer</a></li>
+          <li><a href="pricing.html" class="main-nav__link">Pricing</a></li>
+          <li><a href="login.html" class="main-nav__link" id="nav-auth-link">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title">Book an Appointment</h1>
+        <p class="page-hero__subtitle">Schedule a fitting, consultation, or style review with our lead designer</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <form class="form-panel form-panel--wide" id="appointment-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="appt-first">First Name</label>
+              <input type="text" id="appt-first" name="firstName" required autocomplete="given-name">
+            </div>
+            <div class="form-group">
+              <label for="appt-last">Last Name</label>
+              <input type="text" id="appt-last" name="lastName" required autocomplete="family-name">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="appt-email">Email</label>
+              <input type="email" id="appt-email" name="email" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label for="appt-phone">Phone</label>
+              <input type="tel" id="appt-phone" name="phone" required autocomplete="tel">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="appt-type">Appointment Type</label>
+              <select id="appt-type" name="type" required>
+                <option value="">Select type</option>
+                <option value="consultation">Style Consultation</option>
+                <option value="fitting">Private Fitting</option>
+                <option value="followup">Follow-up Fitting</option>
+                <option value="pickup">Garment Pickup</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="appt-date">Preferred Date</label>
+              <input type="date" id="appt-date" name="date" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="appt-time">Preferred Time</label>
+            <select id="appt-time" name="time" required>
+              <option value="">Select time</option>
+              <option value="10:00">10:00 AM</option>
+              <option value="11:30">11:30 AM</option>
+              <option value="13:00">1:00 PM</option>
+              <option value="14:30">2:30 PM</option>
+              <option value="16:00">4:00 PM</option>
+              <option value="17:30">5:30 PM</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="appt-notes">Notes for Designer (optional)</label>
+            <textarea id="appt-notes" name="notes" placeholder="Share outfit interests, occasion, or special requests..."></textarea>
+          </div>
+          <button type="submit" class="btn btn--primary" style="width:100%;">Request Appointment</button>
+          <p class="form-message" id="appointment-message" role="status" aria-live="polite"></p>
+          <p class="form-footer">Already have an account? <a href="login.html">Log in</a> for faster booking.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container footer__bottom-inner" style="padding:24px 0;"><p>&copy; 2026 Kansy Couture</p></div></footer>
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

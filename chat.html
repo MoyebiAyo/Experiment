@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Chat directly with the Kansy Couture lead designer.">
+  <title>Chat Designer — Kansy Couture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="chat">
+  <header class="main-header">
+    <div class="main-header__inner">
+      <a href="index.html" class="logo"><span class="logo__title">Kansy Couture</span><span class="logo__tagline">Bespoke Fashion Design</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
+      <nav class="main-nav" id="main-nav">
+        <ul class="main-nav__list">
+          <li><a href="index.html" class="main-nav__link">Home</a></li>
+          <li><a href="collections.html" class="main-nav__link">Collections</a></li>
+          <li><a href="appointment.html" class="main-nav__link">Book Appointment</a></li>
+          <li><a href="chat.html" class="main-nav__link active">Chat Designer</a></li>
+          <li><a href="pricing.html" class="main-nav__link">Pricing</a></li>
+          <li><a href="login.html" class="main-nav__link" id="nav-auth-link">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title">Designer Interaction</h1>
+        <p class="page-hero__subtitle">Connect with Kansy, our lead designer, for personalized style guidance</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="chat-layout" id="chat-layout">
+          <aside class="chat-sidebar">
+            <div class="chat-sidebar__designer">
+              <div class="chat-sidebar__avatar" aria-hidden="true">K</div>
+              <p class="chat-sidebar__name">Kansy Adeyemi</p>
+              <p class="chat-sidebar__role">Lead Fashion Designer</p>
+            </div>
+            <p style="font-size:12px;opacity:0.8;line-height:1.6;">Typically replies within 2 hours during studio hours (Mon–Sat, 10am–7pm EST).</p>
+          </aside>
+          <div class="chat-main">
+            <div class="chat-messages" id="chat-messages" role="log" aria-live="polite" aria-label="Chat messages">
+              <div class="chat-message chat-message--designer">
+                Welcome to Kansy Couture! I'm Kansy, your designer. How can I help you today — a custom piece, fitting, or pricing question?
+                <span class="chat-message__time">Just now</span>
+              </div>
+            </div>
+            <form class="chat-input-bar" id="chat-form">
+              <label for="chat-input" class="visually-hidden">Message</label>
+              <input type="text" id="chat-input" placeholder="Type your message..." autocomplete="off" required>
+              <button type="submit" class="btn btn--primary btn--small">Send</button>
+            </form>
+          </div>
+        </div>
+        <p class="form-footer" style="margin-top:24px;">Prefer an in-person visit? <a href="appointment.html">Book an appointment</a></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="container footer__bottom-inner" style="padding:24px 0;"><p>&copy; 2026 Kansy Couture</p></div></footer>
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

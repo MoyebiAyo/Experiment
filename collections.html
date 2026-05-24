@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse Kansy Couture fashion collections with outfit prices, search, and filters.">
+  <title>Collections — Kansy Couture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="collections">
+  <div class="utility-bar"><p class="utility-bar__message">All prices shown are starting rates — final quote at consultation</p></div>
+  <header class="main-header">
+    <div class="main-header__inner">
+      <a href="index.html" class="logo"><span class="logo__title">Kansy Couture</span><span class="logo__tagline">Bespoke Fashion Design</span></a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span></button>
+      <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+        <ul class="main-nav__list">
+          <li><a href="index.html" class="main-nav__link">Home</a></li>
+          <li><a href="collections.html" class="main-nav__link active">Collections</a></li>
+          <li><a href="appointment.html" class="main-nav__link">Book Appointment</a></li>
+          <li><a href="chat.html" class="main-nav__link">Chat Designer</a></li>
+          <li><a href="pricing.html" class="main-nav__link">Pricing</a></li>
+          <li><a href="login.html" class="main-nav__link" id="nav-auth-link">Login</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a href="login.html" class="header-actions__icon" aria-label="Account"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1 class="page-hero__title">Fashion Collection Gallery</h1>
+        <p class="page-hero__subtitle">Browse curated outfits, view starting prices, and book a fitting for any piece</p>
+      </div>
+    </section>
+
+    <section class="section products">
+      <div class="container">
+        <div class="products__toolbar">
+          <div class="products__filters" role="group" aria-label="Filter by category">
+            <button type="button" class="filter-btn active" data-filter="all">All</button>
+            <button type="button" class="filter-btn" data-filter="dresses">Dresses</button>
+            <button type="button" class="filter-btn" data-filter="outerwear">Outerwear</button>
+            <button type="button" class="filter-btn" data-filter="footwear">Footwear</button>
+            <button type="button" class="filter-btn" data-filter="accessories">Accessories</button>
+          </div>
+          <div class="products__search">
+            <label for="collection-search" class="visually-hidden">Search collections</label>
+            <input type="search" id="collection-search" placeholder="Search outfits..." aria-label="Search outfits">
+          </div>
+        </div>
+
+        <div class="products__grid" id="collections-grid">
+          <article class="product-card" data-category="dresses" data-name="Silk Evening Gown">
+            <a href="appointment.html" class="product-card__link">
+              <div class="product-card__image"><img src="images/product-silk-dress.jpg" alt="Silk Evening Gown" loading="lazy"><span class="product-card__badge">Bespoke</span></div>
+              <h3 class="product-card__name">Silk Evening Gown</h3>
+              <p class="product-card__meta">Custom fit · 2–3 weeks</p>
+              <p class="product-card__price">From $890</p>
+            </a>
+          </article>
+          <article class="product-card" data-category="outerwear" data-name="Structured Couture Blazer">
+            <a href="appointment.html" class="product-card__link">
+              <div class="product-card__image"><img src="images/product-blazer.jpg" alt="Structured Couture Blazer" loading="lazy"></div>
+              <h3 class="product-card__name">Structured Couture Blazer</h3>
+              <p class="product-card__meta">Tailored · Premium wool</p>
+              <p class="product-card__price">From $650</p>
+            </a>
+          </article>
+          <article class="product-card" data-category="footwear" data-name="Handcrafted Ankle Boots">
+            <a href="appointment.html" class="product-card__link">
+              <div class="product-card__image"><img src="images/product-boots.jpg" alt="Handcrafted Ankle Boots" loading="lazy"></div>
+              <h3 class="product-card__name">Handcrafted Ankle Boots</h3>
+              <p class="product-card__meta">Italian leather</p>
+              <p class="product-card__price">From $420</p>
+            </a>
+          </article>
+          <article class="product-card" data-category="accessories" data-name="Gold Statement Earrings">
+            <a href="appointment.html" class="product-card__link">
+              <div class="product-card__image"><img src="images/product-earrings.jpg" alt="Gold Statement Earrings" loading="lazy"></div>
+              <h3 class="product-card__name">Gold Statement Earrings</h3>
+              <p class="product-card__meta">14k gold plated</p>
+              <p class="product-card__price">From $185</p>
+            </a>
+          </article>
+          <article class="product-card" data-category="dresses" data-name="Linen Couture Skirt">
+            <a href="appointment.html" class="product-card__link">
+              <div class="product-card__image"><img src="images/product-skirt.jpg" alt="Linen Couture Skirt" loading="lazy"><span class="product-card__badge product-card__badge--custom">Popular</span></div>
+              <h3 class="product-card__name">Linen Couture Skirt</h3>
+              <p class="product-card__meta">Made to measure</p>
+              <p class="product-card__price">From $320</p>
+            </a>
+          </article>
+          <article class="product-card" data-category="accessories" data-name="Structured Designer Handbag">
+            <a href="appointment.html" class="product-card__link">
+              <div class="product-card__image"><img src="images/product-handbag.jpg" alt="Structured Designer Handbag" loading="lazy"></div>
+              <h3 class="product-card__name">Structured Designer Handbag</h3>
+              <p class="product-card__meta">Limited edition</p>
+              <p class="product-card__price">From $540</p>
+            </a>
+          </article>
+        </div>
+        <p id="no-results" class="section__subtitle" style="display:none;text-align:center;margin-top:32px;">No outfits match your search. Try a different filter or term.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__bottom-inner" style="padding:24px 0;border:none;">
+      <p>&copy; 2026 Kansy Couture. <a href="index.html">Return home</a></p>
+    </div>
+  </footer>
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
