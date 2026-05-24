@@ -1,0 +1,131 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model — Kansy Couture
+// ===============================================================
+//
+// Collection: products / Document ID: auto
+//   name (string), description (string), price (string), priceNote (string, optional)
+//   category (string: dresses|outerwear|footwear|accessories)
+//   imageUrl (string), imagePath (string, optional), badge (string, optional)
+//   active (bool), sortOrder (number), createdAt (timestamp), updatedAt (timestamp)
+//
+// Collection: services / Document ID: auto
+//   title, description, icon, ctaLabel, ctaHref, featured (bool), active (bool)
+//   sortOrder (number), createdAt, updatedAt
+//
+// Collection: content / Document ID: site (single doc with nested maps)
+//   utilityBar, heroSlides[], promo{}, stories[], features[], about{}, paymentInfo{}
+//
+// Collection: admins / Document ID: Firebase Auth uid
+//   email (string), createdAt (timestamp)
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email == 'admin@kansycouture.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function hasOnlyKeys(data, keys) {
+      return data.keys().hasOnly(keys);
+    }
+
+    function validCategory(cat) {
+      return cat in ['dresses', 'outerwear', 'footwear', 'accessories'];
+    }
+
+    function isValidProduct() {
+      let d = request.resource.data;
+      return hasOnlyKeys(d, [
+          'name', 'description', 'price', 'priceNote', 'category',
+          'imageUrl', 'imagePath', 'badge', 'active', 'sortOrder',
+          'createdAt', 'updatedAt'
+        ]) &&
+        d.name is string && d.name.size() > 0 && d.name.size() < 120 &&
+        d.description is string && d.description.size() < 500 &&
+        d.price is string && d.price.size() > 0 && d.price.size() < 40 &&
+        (!('priceNote' in d) || (d.priceNote is string && d.priceNote.size() < 80)) &&
+        validCategory(d.category) &&
+        d.imageUrl is string && d.imageUrl.size() < 2000 &&
+        (!('imagePath' in d) || (d.imagePath is string && d.imagePath.size() < 500)) &&
+        (!('badge' in d) || (d.badge is string && d.badge.size() < 40)) &&
+        d.active is bool &&
+        d.sortOrder is number && d.sortOrder >= 0 && d.sortOrder < 10000 &&
+        d.createdAt is timestamp &&
+        d.updatedAt is timestamp;
+    }
+
+    function isValidService() {
+      let d = request.resource.data;
+      return hasOnlyKeys(d, [
+          'title', 'description', 'icon', 'ctaLabel', 'ctaHref', 'price', 'period',
+          'whatsappPackage', 'features', 'featured', 'active', 'sortOrder', 'createdAt', 'updatedAt'
+        ]) &&
+        d.title is string && d.title.size() > 0 && d.title.size() < 80 &&
+        d.description is string && d.description.size() < 600 &&
+        d.icon is string && d.icon.size() < 10 &&
+        d.ctaLabel is string && d.ctaLabel.size() < 60 &&
+        d.ctaHref is string && d.ctaHref.size() < 200 &&
+        (!('price' in d) || (d.price is string && d.price.size() < 40)) &&
+        (!('period' in d) || (d.period is string && d.period.size() < 80)) &&
+        (!('whatsappPackage' in d) || (d.whatsappPackage is string && d.whatsappPackage.size() < 80)) &&
+        (!('features' in d) || (d.features is list && d.features.size() <= 12)) &&
+        d.featured is bool &&
+        d.active is bool &&
+        d.sortOrder is number && d.sortOrder >= 0 && d.sortOrder < 10000 &&
+        d.createdAt is timestamp &&
+        d.updatedAt is timestamp;
+    }
+
+    function isValidContent() {
+      let d = request.resource.data;
+      return d.keys().hasOnly([
+          'utilityBar', 'heroSlides', 'promo', 'stories', 'features',
+          'about', 'paymentInfo', 'updatedAt'
+        ]) &&
+        d.updatedAt is timestamp &&
+        d.utilityBar is map &&
+        d.heroSlides is list && d.heroSlides.size() <= 6 &&
+        d.promo is map &&
+        d.stories is list && d.stories.size() <= 12 &&
+        d.features is list && d.features.size() <= 8 &&
+        d.about is map &&
+        d.paymentInfo is map;
+    }
+
+    match /products/{productId} {
+      allow read: if resource.data.active == true || isAdmin();
+      allow create: if isAdmin() && isValidProduct();
+      allow update: if isAdmin() && isValidProduct();
+      allow delete: if isAdmin();
+    }
+
+    match /services/{serviceId} {
+      allow read: if resource.data.active == true || isAdmin();
+      allow create: if isAdmin() && isValidService();
+      allow update: if isAdmin() && isValidService();
+      allow delete: if isAdmin();
+    }
+
+    match /content/{docId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isValidContent();
+      allow delete: if isAdmin();
+    }
+
+    match /admins/{uid} {
+      allow read: if isAuthenticated() && request.auth.uid == uid;
+      allow write: if false;
+    }
+  }
+}

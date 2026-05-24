@@ -1,0 +1,11 @@
+{
+  "name": "kansy-couture",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed": "node scripts/seed-firestore.mjs"
+  },
+  "devDependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}

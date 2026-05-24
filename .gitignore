@@ -1,7 +1,13 @@
 ﻿.env
 .env.*
+.env.local
 *.pem
 credentials.json
+serviceAccount*.json
 node_modules/
 .DS_Store
 Thumbs.db
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log

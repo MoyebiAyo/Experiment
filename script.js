@@ -168,12 +168,13 @@
   }
 
   /* Hero Carousel */
-  var slides = document.querySelectorAll('.hero__slide');
-  var dots = document.querySelectorAll('.hero__dot');
+  var slides = [];
+  var dots = [];
   var prevBtn = document.getElementById('hero-prev');
   var nextBtn = document.getElementById('hero-next');
   var currentSlide = 0;
   var autoplayTimer;
+  var heroCarouselBound = false;
 
   function goToSlide(index) {
     if (!slides.length) return;
@@ -202,20 +203,43 @@
     if (autoplayTimer) clearInterval(autoplayTimer);
   }
 
-  if (prevBtn) prevBtn.addEventListener('click', function () { prevSlideFn(); startAutoplay(); });
-  if (nextBtn) nextBtn.addEventListener('click', function () { nextSlide(); startAutoplay(); });
-  dots.forEach(function (dot) {
-    dot.addEventListener('click', function () {
-      goToSlide(parseInt(dot.dataset.index, 10));
-      startAutoplay();
+  function initHeroCarousel() {
+    slides = document.querySelectorAll('.hero__slide');
+    dots = document.querySelectorAll('.hero__dot');
+    currentSlide = 0;
+    stopAutoplay();
+    if (!slides.length) return;
+
+    slides.forEach(function (slide, i) {
+      slide.classList.toggle('active', i === 0);
     });
-  });
-  var hero = document.querySelector('.hero');
-  if (hero) {
-    hero.addEventListener('mouseenter', stopAutoplay);
-    hero.addEventListener('mouseleave', startAutoplay);
+    dots.forEach(function (dot, i) {
+      dot.classList.toggle('active', i === 0);
+      dot.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    });
+
+    if (!heroCarouselBound) {
+      heroCarouselBound = true;
+      if (prevBtn) prevBtn.addEventListener('click', function () { prevSlideFn(); startAutoplay(); });
+      if (nextBtn) nextBtn.addEventListener('click', function () { nextSlide(); startAutoplay(); });
+      document.querySelector('.hero__dots')?.addEventListener('click', function (e) {
+        var dot = e.target.closest('.hero__dot');
+        if (!dot) return;
+        goToSlide(parseInt(dot.dataset.index, 10));
+        startAutoplay();
+      });
+      var hero = document.querySelector('.hero');
+      if (hero) {
+        hero.addEventListener('mouseenter', stopAutoplay);
+        hero.addEventListener('mouseleave', startAutoplay);
+      }
+    }
     startAutoplay();
   }
+
+  window.initHeroCarousel = initHeroCarousel;
+  initHeroCarousel();
+  window.addEventListener('kansy:hero-updated', initHeroCarousel);
 
   /* Mobile Navigation */
   var navToggle = document.querySelector('.nav-toggle');
@@ -286,6 +310,7 @@
   var activeFilter = 'all';
 
   function applyCollectionFilters() {
+    collectionsGrid = document.getElementById('collections-grid');
     if (!collectionsGrid) return;
     var query = collectionSearch ? collectionSearch.value.trim().toLowerCase() : '';
     var cards = collectionsGrid.querySelectorAll('.product-card');
@@ -390,20 +415,21 @@
       var users = getStorage(STORAGE_KEYS.users, []);
       var found = users.find(function (u) { return u.email === email && u.password === password; });
       if (!found) {
-        if (email === 'admin@kansycouture.com' && password === 'admin123') {
-          found = { name: 'Admin', email: email, role: 'admin' };
-        } else {
-          msg.textContent = 'Invalid email or password. Try registering first.';
+        if (email === 'admin@kansycouture.com') {
+          msg.textContent = 'Use Admin Sign In for the Firebase dashboard.';
           msg.classList.add('error');
+          setTimeout(function () { window.location.href = 'admin-login.html'; }, 1500);
           return;
         }
+        msg.textContent = 'Invalid email or password. Try registering first.';
+        msg.classList.add('error');
+        return;
       }
       setStorage(STORAGE_KEYS.user, found);
       msg.textContent = 'Signed in! Redirecting...';
       msg.classList.add('success');
       showToast('Welcome back!', 'success');
-      var dest = found.role === 'admin' ? 'admin.html' : 'index.html';
-      setTimeout(function () { window.location.href = dest; }, 1000);
+      setTimeout(function () { window.location.href = 'index.html'; }, 1000);
     });
   }
 
@@ -496,6 +522,8 @@
   }
 
   /* Admin dashboard (FR-6, FR-7) */
+  window.applyCollectionFilters = applyCollectionFilters;
+
   function renderAdminAppointments() {
     var tbody = document.getElementById('admin-appointments-body');
     if (!tbody) return;
@@ -540,33 +568,7 @@
     });
   }
 
-  var adminNavLinks = document.querySelectorAll('.admin-nav a');
-  adminNavLinks.forEach(function (link) {
-    link.addEventListener('click', function (e) {
-      e.preventDefault();
-      var panelId = link.getAttribute('data-panel');
-      adminNavLinks.forEach(function (l) { l.classList.remove('active'); });
-      link.classList.add('active');
-      document.querySelectorAll('.admin-panel').forEach(function (p) {
-        p.classList.toggle('active', p.getAttribute('data-panel') === panelId);
-      });
-    });
-  });
-
-  document.querySelectorAll('#admin-collections-body button[data-action="toggle"]').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var row = btn.closest('tr');
-      var statusEl = row.querySelector('.status');
-      if (statusEl.textContent === 'Active') {
-        statusEl.textContent = 'Hidden';
-        statusEl.className = 'status status--pending';
-      } else {
-        statusEl.textContent = 'Active';
-        statusEl.className = 'status status--confirmed';
-      }
-      showToast('Collection status updated', 'success');
-    });
-  });
+  window.renderAdminAppointments = renderAdminAppointments;
 
   if (document.body.getAttribute('data-page') === 'admin') {
     renderAdminAppointments();

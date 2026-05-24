@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Kansy Couture admin sign in — manage products, services, and site content.">
+  <title>Admin Sign In — Kansy Couture</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="admin-login">
+  <header class="main-header">
+    <div class="main-header__inner">
+      <a href="index.html" class="logo"><span class="logo__title">Kansy Couture</span><span class="logo__tagline">Admin Portal</span></a>
+      <a href="index.html" class="btn btn--secondary btn--small">Back to site</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="page-hero page-hero--compact">
+      <div class="container">
+        <h1 class="page-hero__title">Admin Sign In</h1>
+        <p class="page-hero__subtitle">Manage products, services, images, and site copy with Firebase</p>
+      </div>
+    </section>
+
+    <section class="section form-section">
+      <div class="container">
+        <form class="form-panel" id="admin-login-form" novalidate>
+          <div class="form-group">
+            <label for="admin-email">Admin email</label>
+            <input type="email" id="admin-email" name="email" required autocomplete="email" value="admin@kansycouture.com">
+          </div>
+          <div class="form-group">
+            <label for="admin-password">Password</label>
+            <input type="password" id="admin-password" name="password" required autocomplete="current-password" minlength="6">
+          </div>
+          <button type="submit" class="btn btn--primary btn--block">Sign In to Dashboard</button>
+          <p class="form-message" id="admin-login-message" role="status" aria-live="polite"></p>
+          <p class="form-footer form-footer--spaced" style="font-size:13px;color:var(--color-muted);">
+            Create the admin user in Firebase Console → Authentication (Email/Password), then sign in here.
+            See <strong>README-FIREBASE.md</strong> for full setup.
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+  <script src="script.js"></script>
+  <script type="module">
+    import { initAdminLoginForm } from './js/admin-auth.js';
+    initAdminLoginForm();
+  </script>
+</body>
+</html>

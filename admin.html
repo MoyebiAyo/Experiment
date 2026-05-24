@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Kansy Couture admin dashboard — manage collections and appointments.">
+  <meta name="description" content="Kansy Couture admin dashboard — manage products, services, images, and site content.">
   <title>Admin Dashboard — Kansy Couture</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,17 +14,30 @@
   <header class="main-header">
     <div class="main-header__inner">
       <a href="index.html" class="logo"><span class="logo__title">Kansy Couture</span><span class="logo__tagline">Admin Portal</span></a>
-      <a href="index.html" class="btn btn--secondary btn--small">Exit Admin</a>
+      <div class="header-actions" style="gap:12px;">
+        <span class="admin-user-label" id="admin-user-email"></span>
+        <button type="button" class="btn btn--secondary btn--small" id="btn-admin-signout">Sign out</button>
+        <a href="index.html" class="btn btn--secondary btn--small">Exit Admin</a>
+      </div>
     </div>
   </header>
+
+  <div class="admin-config-banner" id="admin-config-banner" hidden>
+    <div class="container">
+      <p>Firebase is not configured. Copy <code>js/firebase-config.example.js</code> to <code>js/firebase-config.js</code> and add your project keys, then deploy rules. See README-FIREBASE.md.</p>
+    </div>
+  </div>
 
   <main class="admin-layout">
     <aside class="admin-sidebar">
       <p class="admin-sidebar__title">Dashboard</p>
       <nav class="admin-nav" aria-label="Admin sections">
         <a href="#overview" class="active" data-panel="overview">Overview</a>
+        <a href="#products" data-panel="products">Products</a>
+        <a href="#services" data-panel="services">Services</a>
+        <a href="#content" data-panel="content">Write-ups</a>
+        <a href="#images" data-panel="images">Images</a>
         <a href="#appointments" data-panel="appointments">Appointments</a>
-        <a href="#collections" data-panel="collections">Collections</a>
       </nav>
     </aside>
 
@@ -33,49 +46,165 @@
         <h2>Overview</h2>
         <div class="admin-stats">
           <div class="admin-stat"><p class="admin-stat__value" id="stat-appointments">0</p><p class="admin-stat__label">Pending Appointments</p></div>
-          <div class="admin-stat"><p class="admin-stat__value">6</p><p class="admin-stat__label">Active Collections</p></div>
+          <div class="admin-stat"><p class="admin-stat__value" id="stat-products">0</p><p class="admin-stat__label">Active Products</p></div>
           <div class="admin-stat"><p class="admin-stat__value" id="stat-clients">0</p><p class="admin-stat__label">Registered Clients</p></div>
           <div class="admin-stat"><p class="admin-stat__value">4.9</p><p class="admin-stat__label">Client Rating</p></div>
         </div>
-        <p style="font-size:14px;color:var(--color-muted);">Manage appointments and collections from the sidebar. Changes sync locally for this demo portal.</p>
+        <p style="font-size:14px;color:var(--color-muted);margin-bottom:16px;">Manage catalog and site copy in real time. WhatsApp orders on the public site are unchanged.</p>
+        <button type="button" class="btn btn--primary btn--small" id="btn-seed-data">Import site defaults to Firestore</button>
+      </section>
+
+      <section class="admin-panel" id="panel-products" data-panel="products">
+        <div class="admin-panel__toolbar">
+          <h2>Products</h2>
+          <button type="button" class="btn btn--primary btn--small" id="btn-add-product">Add product</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" aria-label="Products">
+            <thead>
+              <tr><th>Name</th><th>Category</th><th>Price</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="admin-products-body">
+              <tr><td colspan="5" style="text-align:center;color:var(--color-muted);">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="panel-services" data-panel="services">
+        <div class="admin-panel__toolbar">
+          <h2>Services &amp; packages</h2>
+          <button type="button" class="btn btn--primary btn--small" id="btn-add-service">Add service</button>
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" aria-label="Services">
+            <thead>
+              <tr><th>Title</th><th>Price</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="admin-services-body">
+              <tr><td colspan="4" style="text-align:center;color:var(--color-muted);">Loading…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-panel" id="panel-content" data-panel="content">
+        <h2>Site write-ups</h2>
+        <p style="font-size:14px;color:var(--color-muted);margin-bottom:12px;">Edit hero slides, promo banner, stories, features, and payment copy (JSON). Save to update the live site.</p>
+        <textarea id="content-json" class="admin-textarea" rows="18" aria-label="Site content JSON"></textarea>
+        <button type="button" class="btn btn--primary btn--small" id="btn-save-content" style="margin-top:12px;">Save content</button>
+      </section>
+
+      <section class="admin-panel" id="panel-images" data-panel="images">
+        <h2>Image upload</h2>
+        <p style="font-size:14px;color:var(--color-muted);margin-bottom:16px;">Upload to Firebase Storage (public read). Copy the URL into a product or content field.</p>
+        <div class="form-group">
+          <label for="admin-image-target">Storage folder</label>
+          <select id="admin-image-target">
+            <option value="site/hero">site/hero</option>
+            <option value="site/promo">site/promo</option>
+            <option value="site/stories">site/stories</option>
+            <option value="products/uploads">products/uploads</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="admin-image-file">Choose image (max 5MB)</label>
+          <input type="file" id="admin-image-file" accept="image/*">
+        </div>
+        <div id="admin-image-preview" class="admin-image-preview"></div>
+        <div class="form-group" style="margin-top:16px;">
+          <label for="admin-image-url-result">Download URL</label>
+          <input type="text" id="admin-image-url-result" readonly>
+          <button type="button" class="btn btn--secondary btn--small" id="btn-copy-image-url" style="margin-top:8px;">Copy URL</button>
+        </div>
       </section>
 
       <section class="admin-panel" id="panel-appointments" data-panel="appointments">
         <h2>Manage Appointments</h2>
+        <p style="font-size:14px;color:var(--color-muted);margin-bottom:12px;">Stored locally in the browser (demo). WhatsApp confirmations still open on booking.</p>
         <div class="admin-table-wrap">
-        <table class="admin-table" aria-label="Appointments">
-          <thead>
-            <tr><th>Client</th><th>Type</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr>
-          </thead>
-          <tbody id="admin-appointments-body">
-            <tr><td colspan="6" style="text-align:center;color:var(--color-muted);">No appointments yet</td></tr>
-          </tbody>
-        </table>
-        </div>
-      </section>
-
-      <section class="admin-panel" id="panel-collections" data-panel="collections">
-        <h2>Manage Collections</h2>
-        <div class="admin-table-wrap">
-        <table class="admin-table" aria-label="Collections">
-          <thead>
-            <tr><th>Outfit</th><th>Category</th><th>Starting Price</th><th>Status</th><th>Actions</th></tr>
-          </thead>
-          <tbody id="admin-collections-body">
-            <tr data-id="1"><td>Silk Evening Gown</td><td>Dresses</td><td>$890</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle" aria-label="Toggle status">Toggle</button></td></tr>
-            <tr data-id="2"><td>Structured Couture Blazer</td><td>Outerwear</td><td>$650</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
-            <tr data-id="3"><td>Handcrafted Ankle Boots</td><td>Footwear</td><td>$420</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
-            <tr data-id="4"><td>Gold Statement Earrings</td><td>Accessories</td><td>$185</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
-            <tr data-id="5"><td>Linen Couture Skirt</td><td>Dresses</td><td>$320</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
-            <tr data-id="6"><td>Structured Designer Handbag</td><td>Accessories</td><td>$540</td><td><span class="status status--confirmed">Active</span></td><td class="admin-actions"><button type="button" data-action="toggle">Toggle</button></td></tr>
-          </tbody>
-        </table>
+          <table class="admin-table" aria-label="Appointments">
+            <thead>
+              <tr><th>Client</th><th>Type</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="admin-appointments-body">
+              <tr><td colspan="6" style="text-align:center;color:var(--color-muted);">No appointments yet</td></tr>
+            </tbody>
+          </table>
         </div>
       </section>
     </div>
   </main>
 
+  <!-- Product modal -->
+  <div class="admin-modal" id="modal-product" aria-hidden="true" role="dialog" aria-labelledby="product-form-title">
+    <div class="admin-modal__dialog">
+      <button type="button" class="admin-modal__close" data-close-modal="modal-product" aria-label="Close">&times;</button>
+      <h3 id="product-form-title">Add product</h3>
+      <form id="product-form" class="admin-form">
+        <div class="form-group"><label>Name</label><input name="name" required maxlength="120"></div>
+        <div class="form-group"><label>Description / meta</label><input name="description" maxlength="500"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Price</label><input name="price" required placeholder="From $890"></div>
+          <div class="form-group"><label>Price note</label><input name="priceNote" placeholder="Optional"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Category</label>
+            <select name="category">
+              <option value="dresses">Dresses</option>
+              <option value="outerwear">Outerwear</option>
+              <option value="footwear">Footwear</option>
+              <option value="accessories">Accessories</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Badge</label><input name="badge" placeholder="Bespoke, Popular…"></div>
+        </div>
+        <div class="form-group"><label>Image URL</label><input name="imageUrl" required placeholder="images/… or Storage URL"></div>
+        <div class="form-group"><label>Upload image</label><input type="file" id="product-image-file" accept="image/*"></div>
+        <div id="product-image-preview"></div>
+        <div class="form-row">
+          <div class="form-group"><label>Sort order</label><input type="number" name="sortOrder" value="0" min="0"></div>
+          <div class="form-group form-group--checkbox"><label><input type="checkbox" name="active" checked> Active (visible on site)</label></div>
+        </div>
+        <button type="submit" class="btn btn--primary">Save product</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Service modal -->
+  <div class="admin-modal" id="modal-service" aria-hidden="true" role="dialog" aria-labelledby="service-form-title">
+    <div class="admin-modal__dialog">
+      <button type="button" class="admin-modal__close" data-close-modal="modal-service" aria-label="Close">&times;</button>
+      <h3 id="service-form-title">Add service</h3>
+      <form id="service-form" class="admin-form">
+        <div class="form-group"><label>Title</label><input name="title" required></div>
+        <div class="form-group"><label>Description</label><textarea name="description" rows="2"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>Price</label><input name="price" placeholder="From $650"></div>
+          <div class="form-group"><label>Period</label><input name="period"></div>
+        </div>
+        <div class="form-group"><label>Features (one per line)</label><textarea name="features" rows="4"></textarea></div>
+        <div class="form-row">
+          <div class="form-group"><label>CTA label</label><input name="ctaLabel"></div>
+          <div class="form-group"><label>CTA link</label><input name="ctaHref" placeholder="appointment.html"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>WhatsApp package name</label><input name="whatsappPackage"></div>
+          <div class="form-group"><label>Icon</label><input name="icon" value="01" maxlength="4"></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Sort order</label><input type="number" name="sortOrder" value="0"></div>
+          <div class="form-group form-group--checkbox"><label><input type="checkbox" name="featured"> Featured package</label></div>
+          <div class="form-group form-group--checkbox"><label><input type="checkbox" name="active" checked> Active</label></div>
+        </div>
+        <button type="submit" class="btn btn--primary">Save service</button>
+      </form>
+    </div>
+  </div>
+
   <div class="toast-container" id="toast-container" aria-live="polite"></div>
   <script src="script.js"></script>
+  <script type="module" src="js/admin-dashboard.js"></script>
 </body>
 </html>
