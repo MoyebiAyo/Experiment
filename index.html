@@ -12,7 +12,7 @@
 </head>
 <body>
   <div class="utility-bar" role="banner">
-    <p class="utility-bar__message">Book your private fitting — complimentary consultation for new clients</p>
+    <p class="utility-bar__message"><a href="#" data-whatsapp="booking" style="color:inherit;text-decoration:none;">Book your private fitting — complimentary consultation for new clients</a></p>
     <div class="utility-bar__social" aria-label="Social media links">
       <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
@@ -69,8 +69,8 @@
             <h1 class="hero__title">Where Elegance Meets Your Vision</h1>
             <p class="hero__subtitle">Explore bespoke collections, connect with your designer, and book private fittings — all in one premium experience.</p>
             <div class="hero__actions">
-              <a href="collections.html" class="btn btn--primary">Explore Collections</a>
-              <a href="appointment.html" class="btn btn--secondary">Book a Fitting</a>
+              <a href="collections.html" class="btn btn--primary" data-whatsapp="general">Explore Collections</a>
+              <a href="appointment.html" class="btn btn--secondary" data-whatsapp="booking">Book a Fitting</a>
             </div>
           </div>
           <div class="hero__image-wrap">
@@ -97,8 +97,8 @@
             <h1 class="hero__title">Your Style, Perfectly Tailored</h1>
             <p class="hero__subtitle">Schedule fittings and consultations at your convenience. Transparent pricing, seamless booking.</p>
             <div class="hero__actions">
-              <a href="appointment.html" class="btn btn--gold">Schedule Now</a>
-              <a href="collections.html" class="btn btn--secondary">View Outfits</a>
+              <a href="appointment.html" class="btn btn--gold" data-whatsapp="booking">Schedule Now</a>
+              <a href="collections.html" class="btn btn--secondary" data-whatsapp="general">View Outfits</a>
             </div>
           </div>
           <div class="hero__image-wrap">
@@ -176,7 +176,7 @@
           </a>
         </div>
         <div class="section__cta">
-          <a href="collections.html" class="btn btn--primary">View All Collections</a>
+          <a href="collections.html" class="btn btn--primary" data-whatsapp="general">View All Collections</a>
         </div>
       </div>
     </section>
@@ -189,8 +189,8 @@
           <p class="section__subtitle">Handpicked designs with starting prices — final cost confirmed at consultation</p>
         </header>
         <div class="products__grid" id="home-products">
-          <article class="product-card" data-category="dresses">
-            <a href="collections.html" class="product-card__link">
+          <article class="product-card" data-category="dresses" data-name="Silk Evening Gown">
+            <a href="#" class="product-card__link" data-whatsapp="product">
               <div class="product-card__image">
                 <img src="images/product-silk-dress.jpg" alt="Silk Evening Gown" width="300" height="380" loading="lazy">
                 <span class="product-card__badge">Bespoke</span>
@@ -200,8 +200,8 @@
               <p class="product-card__price">From $890<span class="product-card__price-note">Consultation included</span></p>
             </a>
           </article>
-          <article class="product-card" data-category="outerwear">
-            <a href="collections.html" class="product-card__link">
+          <article class="product-card" data-category="outerwear" data-name="Structured Couture Blazer">
+            <a href="#" class="product-card__link" data-whatsapp="product">
               <div class="product-card__image">
                 <img src="images/product-blazer.jpg" alt="Structured Couture Blazer" width="300" height="380" loading="lazy">
               </div>
@@ -210,8 +210,8 @@
               <p class="product-card__price">From $650</p>
             </a>
           </article>
-          <article class="product-card" data-category="footwear">
-            <a href="collections.html" class="product-card__link">
+          <article class="product-card" data-category="footwear" data-name="Handcrafted Ankle Boots">
+            <a href="#" class="product-card__link" data-whatsapp="product">
               <div class="product-card__image">
                 <img src="images/product-boots.jpg" alt="Handcrafted Ankle Boots" width="300" height="380" loading="lazy">
               </div>
@@ -220,8 +220,8 @@
               <p class="product-card__price">From $420</p>
             </a>
           </article>
-          <article class="product-card" data-category="accessories">
-            <a href="collections.html" class="product-card__link">
+          <article class="product-card" data-category="accessories" data-name="Gold Statement Earrings">
+            <a href="#" class="product-card__link" data-whatsapp="product">
               <div class="product-card__image">
                 <img src="images/product-earrings.jpg" alt="Gold Statement Earrings" width="300" height="380" loading="lazy">
               </div>
@@ -230,8 +230,8 @@
               <p class="product-card__price">From $185</p>
             </a>
           </article>
-          <article class="product-card" data-category="dresses">
-            <a href="collections.html" class="product-card__link">
+          <article class="product-card" data-category="dresses" data-name="Linen Couture Skirt">
+            <a href="#" class="product-card__link" data-whatsapp="product">
               <div class="product-card__image">
                 <img src="images/product-skirt.jpg" alt="Linen Couture Skirt" width="300" height="380" loading="lazy">
                 <span class="product-card__badge product-card__badge--custom">Popular</span>
@@ -241,8 +241,8 @@
               <p class="product-card__price">From $320</p>
             </a>
           </article>
-          <article class="product-card" data-category="accessories">
-            <a href="collections.html" class="product-card__link">
+          <article class="product-card" data-category="accessories" data-name="Structured Designer Handbag">
+            <a href="#" class="product-card__link" data-whatsapp="product">
               <div class="product-card__image">
                 <img src="images/product-handbag.jpg" alt="Structured Designer Handbag" width="300" height="380" loading="lazy">
               </div>
@@ -253,7 +253,7 @@
           </article>
         </div>
         <div class="section__cta">
-          <a href="collections.html" class="btn btn--primary">Browse Full Gallery</a>
+          <a href="collections.html" class="btn btn--primary" data-whatsapp="general">Browse Full Gallery</a>
         </div>
       </div>
     </section>
@@ -270,7 +270,7 @@
             <div class="service-card__icon" aria-hidden="true">01</div>
             <h3 class="service-card__title">Browse Collections</h3>
             <p class="service-card__text">Explore our fashion gallery, view outfit details, and check transparent starting prices before your visit.</p>
-            <a href="collections.html" class="btn btn--secondary btn--small">View Gallery</a>
+            <a href="collections.html" class="btn btn--secondary btn--small" data-whatsapp="general">View Gallery</a>
           </article>
           <article class="service-card">
             <div class="service-card__icon" aria-hidden="true">02</div>
@@ -282,7 +282,7 @@
             <div class="service-card__icon" aria-hidden="true">03</div>
             <h3 class="service-card__title">Book Appointment</h3>
             <p class="service-card__text">Schedule fittings and consultations at your convenience. Our designer confirms every booking personally.</p>
-            <a href="appointment.html" class="btn btn--gold btn--small">Book Now</a>
+            <a href="appointment.html" class="btn btn--gold btn--small" data-whatsapp="booking">Book Now</a>
           </article>
         </div>
       </div>
@@ -294,7 +294,7 @@
           <span class="promo__label">New Client Offer</span>
           <h2 class="promo__title">Complimentary Style Consultation</h2>
           <p class="promo__text">Book your first appointment and receive a free 30-minute consultation with our lead designer. Discover pricing packages tailored to your needs.</p>
-          <a href="appointment.html" class="btn btn--light">Book Your Appointment</a>
+          <a href="appointment.html" class="btn btn--light" data-whatsapp="booking">Book Your Appointment</a>
         </div>
         <div class="promo__image">
           <img src="images/promo-autumn.jpg" alt="Kansy Couture seasonal collection showcase" width="500" height="400" loading="lazy">

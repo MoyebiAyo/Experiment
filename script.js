@@ -1,6 +1,105 @@
 (function () {
   'use strict';
 
+  var WHATSAPP_NUMBER = '2348166163717';
+
+  var APPOINTMENT_TYPE_LABELS = {
+    consultation: 'Style Consultation',
+    fitting: 'Private Fitting',
+    followup: 'Follow-up Fitting',
+    pickup: 'Garment Pickup'
+  };
+
+  function orderOnWhatsApp(message) {
+    var url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  function generalOrderMessage() {
+    return 'Hello Kansy Couture, I\'d like to place an order.';
+  }
+
+  function productOrderMessage(name, price) {
+    return 'Hello Kansy Couture, I\'d like to order: ' + name + ' - ' + price;
+  }
+
+  function bookingIntentMessage() {
+    return 'Hello Kansy Couture, I\'d like to book an appointment.';
+  }
+
+  function packageBookingMessage(packageName) {
+    return 'Hello Kansy Couture, I\'d like to book: ' + packageName + '.';
+  }
+
+  function appointmentWhatsAppMessage(data) {
+    var service = APPOINTMENT_TYPE_LABELS[data.type] || data.type;
+    var lines = [
+      'Hello Kansy Couture, I\'d like to book an appointment.',
+      '',
+      'Name: ' + data.firstName + ' ' + data.lastName,
+      'Email: ' + data.email,
+      'Phone: ' + data.phone,
+      'Service: ' + service,
+      'Date: ' + data.date,
+      'Time: ' + data.time
+    ];
+    if (data.notes) lines.push('Notes: ' + data.notes);
+    return lines.join('\n');
+  }
+
+  function getProductFromCard(card) {
+    var name = card.getAttribute('data-name');
+    if (!name) {
+      var nameEl = card.querySelector('.product-card__name');
+      name = nameEl ? nameEl.textContent.trim() : 'Item';
+    }
+    var priceEl = card.querySelector('.product-card__price');
+    var price = priceEl ? priceEl.textContent.trim().replace(/\s+/g, ' ') : '';
+    return { name: name, price: price };
+  }
+
+  window.KansyWhatsApp = {
+    WHATSAPP_NUMBER: WHATSAPP_NUMBER,
+    orderOnWhatsApp: orderOnWhatsApp,
+    generalOrderMessage: generalOrderMessage,
+    productOrderMessage: productOrderMessage,
+    bookingIntentMessage: bookingIntentMessage,
+    appointmentWhatsAppMessage: appointmentWhatsAppMessage
+  };
+
+  document.addEventListener('click', function (e) {
+    var trigger = e.target.closest('[data-whatsapp]');
+    if (!trigger) return;
+
+    var action = trigger.getAttribute('data-whatsapp');
+    var card = trigger.closest('.product-card');
+
+    if (action === 'product' && card) {
+      e.preventDefault();
+      var product = getProductFromCard(card);
+      orderOnWhatsApp(productOrderMessage(product.name, product.price));
+      return;
+    }
+
+    if (action === 'general') {
+      e.preventDefault();
+      orderOnWhatsApp(generalOrderMessage());
+      return;
+    }
+
+    if (action === 'booking') {
+      e.preventDefault();
+      orderOnWhatsApp(bookingIntentMessage());
+      return;
+    }
+
+    if (action === 'package') {
+      e.preventDefault();
+      var pkg = trigger.getAttribute('data-package') || 'service';
+      orderOnWhatsApp(packageBookingMessage(pkg));
+    }
+  });
+
   var STORAGE_KEYS = {
     user: 'kansy_user',
     users: 'kansy_users',
@@ -334,10 +433,11 @@
       var appointments = getStorage(STORAGE_KEYS.appointments, []);
       appointments.push(data);
       setStorage(STORAGE_KEYS.appointments, appointments);
-      msg.textContent = 'Appointment requested! Our designer will confirm within 24 hours.';
+      msg.textContent = 'Appointment saved! Opening WhatsApp to confirm with our designer…';
       msg.classList.add('success');
       appointmentForm.reset();
-      showToast('Appointment booked — confirmation pending', 'success');
+      showToast('Appointment booked — opening WhatsApp', 'success');
+      orderOnWhatsApp(appointmentWhatsAppMessage(data));
     });
   }
 
