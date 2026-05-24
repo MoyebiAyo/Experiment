@@ -18,14 +18,15 @@
   </header>
 
   <main>
-    <section class="page-hero" style="padding:48px 0;">
+    <section class="page-hero page-hero--compact">
       <div class="container">
         <h1 class="page-hero__title">Create Account</h1>
         <p class="page-hero__subtitle">Join Kansy Couture to book appointments and chat with your designer</p>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section form-section">
+      <div class="container">
       <form class="form-panel" id="register-form" novalidate>
         <div class="form-group">
           <label for="reg-name">Full Name</label>
@@ -43,10 +44,11 @@
           <label for="reg-confirm">Confirm Password</label>
           <input type="password" id="reg-confirm" name="confirm" required autocomplete="new-password" minlength="6">
         </div>
-        <button type="submit" class="btn btn--primary" style="width:100%;">Register</button>
+        <button type="submit" class="btn btn--primary btn--block">Register</button>
         <p class="form-message" id="register-message" role="status" aria-live="polite"></p>
         <p class="form-footer">Already registered? <a href="login.html">Sign in</a></p>
       </form>
+      </div>
     </section>
   </main>
 

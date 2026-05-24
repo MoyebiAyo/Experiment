@@ -18,14 +18,15 @@
   </header>
 
   <main>
-    <section class="page-hero" style="padding:48px 0;">
+    <section class="page-hero page-hero--compact">
       <div class="container">
         <h1 class="page-hero__title">Client Login</h1>
         <p class="page-hero__subtitle">Access your appointments, messages, and saved collections</p>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section form-section">
+      <div class="container">
       <form class="form-panel" id="login-form" novalidate>
         <div class="form-group">
           <label for="login-email">Email</label>
@@ -35,11 +36,12 @@
           <label for="login-password">Password</label>
           <input type="password" id="login-password" name="password" required autocomplete="current-password" minlength="6">
         </div>
-        <button type="submit" class="btn btn--primary" style="width:100%;">Sign In</button>
+        <button type="submit" class="btn btn--primary btn--block">Sign In</button>
         <p class="form-message" id="login-message" role="status" aria-live="polite"></p>
         <p class="form-footer">New client? <a href="register.html">Create an account</a></p>
-        <p class="form-footer" style="margin-top:12px;"><a href="admin.html">Admin access</a></p>
+        <p class="form-footer form-footer--spaced"><a href="admin.html">Admin access</a></p>
       </form>
+      </div>
     </section>
   </main>
 

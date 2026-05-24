@@ -222,15 +222,24 @@
   var mainNav = document.getElementById('main-nav');
 
   if (navToggle && mainNav) {
+    function setNavOpen(isOpen) {
+      mainNav.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
     navToggle.addEventListener('click', function () {
-      var isOpen = mainNav.classList.toggle('open');
-      navToggle.setAttribute('aria-expanded', isOpen);
+      setNavOpen(!mainNav.classList.contains('open'));
     });
     mainNav.querySelectorAll('.main-nav__link').forEach(function (link) {
       link.addEventListener('click', function () {
-        mainNav.classList.remove('open');
-        navToggle.setAttribute('aria-expanded', 'false');
+        setNavOpen(false);
       });
+    });
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 768 && mainNav.classList.contains('open')) {
+        setNavOpen(false);
+      }
     });
   }
 
