@@ -1,9 +1,40 @@
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js';
-import { getAuthInstance, getDb, isFirebaseConfigured } from './firebase-app.js';
+import {
+  getAuthInstance,
+  getDb,
+  getFirebaseConfigMessage,
+  isFirebaseConfigured
+} from './firebase-app.js';
 import { showToast } from './utils.js';
 
 var ADMIN_EMAIL = 'admin@kansycouture.com';
+
+function formatAuthError(err) {
+  const code = err && (err.code || err.errorCode);
+  const message = (err && err.message) || 'Sign in failed.';
+
+  if (code === 'auth/configuration-not-found') {
+    return (
+      'Firebase Authentication is not enabled for this project. In Firebase Console → Authentication, click Get started, ' +
+      'enable Email/Password under Sign-in method, create the admin user under Users, and add this site hostname under Authorized domains. ' +
+      'See README-FIREBASE.md.'
+    );
+  }
+  if (code === 'auth/invalid-api-key' || code === 'auth/api-key-not-valid') {
+    return 'Invalid Firebase API key in js/firebase-config.js. Regenerate the web app config and update Vercel FIREBASE_* env vars, then redeploy.';
+  }
+  if (code === 'auth/unauthorized-domain') {
+    return 'This domain is not authorized for Firebase Auth. Add it under Firebase Console → Authentication → Settings → Authorized domains.';
+  }
+  if (/CONFIGURATION_NOT_FOUND/i.test(message)) {
+    return formatAuthError({ code: 'auth/configuration-not-found' });
+  }
+  if (!isFirebaseConfigured()) {
+    return getFirebaseConfigMessage() || message;
+  }
+  return message;
+}
 
 export async function isUserAdmin(user) {
   if (!user) return false;
@@ -55,10 +86,18 @@ export function requireAdminPage(redirectUrl) {
 
 export async function adminSignIn(email, password) {
   if (!isFirebaseConfigured()) {
-    throw new Error('Firebase is not configured yet.');
+    throw new Error(getFirebaseConfigMessage() || 'Firebase is not configured yet.');
   }
   var auth = getAuthInstance();
-  var cred = await signInWithEmailAndPassword(auth, email, password);
+  if (!auth) {
+    throw new Error(getFirebaseConfigMessage() || 'Firebase Auth could not be initialized.');
+  }
+  var cred;
+  try {
+    cred = await signInWithEmailAndPassword(auth, email, password);
+  } catch (err) {
+    throw new Error(formatAuthError(err));
+  }
   var admin = await isUserAdmin(cred.user);
   if (!admin) {
     await signOut(auth);
@@ -77,10 +116,10 @@ export function initAdminLoginForm() {
   if (!form) return;
 
   if (!isFirebaseConfigured()) {
-    var msg = document.getElementById('admin-login-message');
-    if (msg) {
-      msg.textContent = 'Firebase is not configured. Copy js/firebase-config.example.js → js/firebase-config.js and add your project keys.';
-      msg.className = 'form-message error';
+    var configMsg = document.getElementById('admin-login-message');
+    if (configMsg) {
+      configMsg.textContent = getFirebaseConfigMessage();
+      configMsg.className = 'form-message error';
     }
     return;
   }
@@ -102,7 +141,7 @@ export function initAdminLoginForm() {
       var next = params.get('next') || 'admin.html';
       setTimeout(function () { window.location.href = next; }, 800);
     } catch (err) {
-      msg.textContent = err.message || 'Sign in failed.';
+      msg.textContent = formatAuthError(err);
       msg.classList.add('error');
       btn.disabled = false;
     }

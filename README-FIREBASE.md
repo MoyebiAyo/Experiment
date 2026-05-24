@@ -101,9 +101,10 @@ Set these in **Vercel → Project → Settings → Environment Variables** (Prod
 
 `vercel.json` sets `"buildCommand": "npm run build"` so each deployment regenerates the config file.
 
-In Firebase Console → Authentication → **Authorized domains**, add:
+In Firebase Console → Authentication → **Authorized domains**, add every hostname where the site is served:
 
-- `kancyculture.vercel.app`
+- `kansycouture.vercel.app`
+- `kancyculture.vercel.app` (if still in use)
 - `localhost` (for local testing)
 
 ## Security: exposed API key & rotation
@@ -185,7 +186,7 @@ Review `firestore.rules` and `storage.rules` before production traffic.
 
 ## Admin workflow
 
-1. Open **https://kancyculture.vercel.app/admin-login.html** (or local equivalent).
+1. Open **https://kansycouture.vercel.app/admin-login.html** (or local equivalent).
 2. Sign in with the Firebase admin user.
 3. Use **Products**, **Services**, **Write-ups**, and **Images** panels.
 4. WhatsApp order buttons on the public site are unchanged (`script.js`).
@@ -209,9 +210,52 @@ Review `firestore.rules` and `storage.rules` before production traffic.
 
 ## Troubleshooting
 
+### `Firebase: Error (auth/configuration-not-found)`
+
+This means **Firebase Authentication is not set up** for the project (Identity Toolkit has no sign-in configuration), not that the password is wrong.
+
+**Fix in Firebase Console (required at least once):**
+
+1. Open [Authentication](https://console.firebase.google.com/project/kansy-couture/authentication) for project `kansy-couture`.
+2. Click **Get started** if you have not opened Auth before.
+3. **Sign-in method** → enable **Email/Password** → Save.
+4. **Users** → **Add user** → `admin@kansycouture.com` and a strong password (replace demo `admin123`).
+5. **Settings** → **Authorized domains** → add `kansycouture.vercel.app` (and any other Vercel preview/production hostnames).
+
+**Fix on Vercel (production config file):**
+
+1. Project → **Settings** → **Environment Variables** → set all six (names must match exactly):
+
+   - `FIREBASE_API_KEY`
+   - `FIREBASE_AUTH_DOMAIN` (e.g. `kansy-couture.firebaseapp.com`)
+   - `FIREBASE_PROJECT_ID` (`kansy-couture`)
+   - `FIREBASE_STORAGE_BUCKET`
+   - `FIREBASE_MESSAGING_SENDER_ID`
+   - `FIREBASE_APP_ID`
+
+2. **Redeploy** so `npm run build` runs `scripts/generate-firebase-config.js` and writes `js/firebase-config.js`.
+
+3. Confirm production serves config: open `https://YOUR-DOMAIN/js/firebase-config.js` — it must return real values, not 404 or `YOUR_API_KEY` placeholders.
+
+**Optional — enable Email/Password via CLI** (same project directory):
+
+```bash
+# firebase.json should include:
+# "auth": { "providers": { "emailPassword": true } }
+npx -y firebase-tools@latest deploy --only auth
+```
+
+Then create the admin user in Console → Authentication → Users (CLI cannot set passwords for you without a service account import file).
+
+**If `kansycouture.vercel.app` shows “deployment not found”:** the Vercel alias points to a deleted deployment — reconnect the domain in Vercel → Project → Settings → Domains, or deploy from the linked Git repo to `main`.
+
+### Other issues
+
 | Issue | Fix |
 |-------|-----|
 | Permission denied on save | Deploy rules; confirm signed-in user is admin |
 | Empty gallery | Run **Import site defaults** or check `active` flags |
 | Firebase not configured banner | Copy example → `js/firebase-config.js` locally; on Vercel, set env vars and redeploy |
+| `auth/unauthorized-domain` | Add the site hostname under Authentication → Authorized domains |
+| `auth/invalid-api-key` | Regenerate web app config; update all six Vercel env vars and redeploy |
 | Index errors | Deploy indexes: `firebase deploy --only firestore:indexes` |
