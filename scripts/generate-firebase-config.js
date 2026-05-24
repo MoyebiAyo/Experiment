@@ -22,6 +22,11 @@ const envKeys = [
 const missing = envKeys.filter(([, env]) => !process.env[env]?.trim()).map(([, env]) => env);
 if (missing.length) {
   console.error('generate-firebase-config: missing environment variables:\n  ' + missing.join('\n  '));
+  console.error(
+    '\nVercel: Project → Settings → Environment Variables → add all six (Production + Preview + Development), then Redeploy.\n' +
+      'Local: copy .env.example → .env.local, fill values, or run: npm run firebase:print-env\n' +
+      'See README-FIREBASE.md → "Vercel production".'
+  );
   process.exit(1);
 }
 

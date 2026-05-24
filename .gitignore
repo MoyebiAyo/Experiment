@@ -1,7 +1,9 @@
 ﻿.env
 .env.*
+!.env.example
 js/firebase-config.js
 .env.local
+VERCEL-ENV-SETUP.md
 *.pem
 credentials.json
 serviceAccount*.json

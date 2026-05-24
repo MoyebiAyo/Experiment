@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/generate-firebase-config.js",
+    "firebase:print-env": "node scripts/print-firebase-env.mjs",
     "seed": "node scripts/seed-firestore.mjs"
   },
   "devDependencies": {

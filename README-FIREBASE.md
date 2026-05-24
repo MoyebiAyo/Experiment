@@ -84,22 +84,58 @@ npm run seed
 
 ## Vercel production
 
-The deploy runs `npm run build`, which runs `scripts/generate-firebase-config.js` and writes `js/firebase-config.js` from environment variables.
+The deploy runs `npm run build`, which runs `scripts/generate-firebase-config.js` and writes `js/firebase-config.js` from environment variables. If any variable is missing, the build **fails on purpose** (so production never ships with placeholder keys).
 
-### Required Vercel environment variables
+`vercel.json` sets `"buildCommand": "npm run build"`. Dev-only packages (`firebase-admin` for seeding) are not installed on Vercel (`installCommand` omits dev dependencies).
 
-Set these in **Vercel → Project → Settings → Environment Variables** (Production, Preview, and Development as needed):
+### Get values (do not commit keys to git)
 
-| Variable | Example / notes |
-|----------|-----------------|
-| `FIREBASE_API_KEY` | Web API key from Firebase Console |
+**Option A — Firebase CLI** (after `firebase login`):
+
+```bash
+npm run firebase:print-env
+# or: sh scripts/print-firebase-env.sh
+```
+
+Copy each `NAME=value` line into Vercel (see below). Do not paste this output into the repo.
+
+**Option B — Firebase Console**
+
+Project settings → General → Your apps → Web app → **Config** → map fields to env var names in `.env.example`.
+
+### Add variables in Vercel (step by step)
+
+1. Open [vercel.com](https://vercel.com) → your team → project **Kansy Couture** (or linked repo `Experiment`).
+2. **Settings** (top) → **Environment Variables** (left sidebar).
+3. For **each** row below, click **Add** (or **Add New**):
+   - **Key**: exact name (e.g. `FIREBASE_API_KEY`)
+   - **Value**: from `npm run firebase:print-env` or Console (no quotes)
+   - **Environments**: check **Production**, **Preview**, and **Development**
+   - **Save**
+4. Repeat for all six keys:
+
+| Key | Example shape (get yours from CLI/Console) |
+|-----|---------------------------------------------|
+| `FIREBASE_API_KEY` | `AIza…` |
 | `FIREBASE_AUTH_DOMAIN` | `kansy-couture.firebaseapp.com` |
 | `FIREBASE_PROJECT_ID` | `kansy-couture` |
 | `FIREBASE_STORAGE_BUCKET` | `kansy-couture.firebasestorage.app` |
-| `FIREBASE_MESSAGING_SENDER_ID` | Numeric sender ID |
+| `FIREBASE_MESSAGING_SENDER_ID` | numeric, e.g. `377264310869` |
 | `FIREBASE_APP_ID` | `1:…:web:…` |
 
-`vercel.json` sets `"buildCommand": "npm run build"` so each deployment regenerates the config file.
+5. **Deployments** → latest failed deploy → **⋯** → **Redeploy** (or push a new commit to `main`).
+6. Verify: open `https://YOUR-VERCEL-DOMAIN/js/firebase-config.js` — must show real `apiKey` / `projectId`, not `YOUR_API_KEY`.
+
+### Local build with env file (optional)
+
+```bash
+cp .env.example .env.local
+# fill six values, then:
+set -a && source .env.local && set +a   # Git Bash / macOS / Linux
+npm run build
+```
+
+On Windows PowerShell, set each `$env:FIREBASE_API_KEY = "..."` before `npm run build`, or use a tool that loads `.env.local`.
 
 In Firebase Console → Authentication → **Authorized domains**, add every hostname where the site is served:
 
